@@ -1,0 +1,399 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS 변수 정의 */
+:root {
+  /* 색상 - Toss 스타일 (신선하고 활기찬 색상) */
+  --color-primary: #005FCC;      /* 신선한 블루 (기존 #1A3A52 대체) */
+  --color-secondary: #2563EB;    /* 강렬한 블루 */
+  --color-accent: #10B981;       /* 에메랄드 그린 */
+  --color-neutral-dark: #1F2937; /* 거의 검정 (더 명확한 대비) */
+  --color-neutral-light: #F9FAFB; /* 순백에 가까운 밝은 회색 */
+  --color-error: #EF4444;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  
+  /* 간격 - Toss 스타일 넉넉한 여백 */
+  --spacing-xs: 6px;
+  --spacing-sm: 12px;
+  --spacing-md: 20px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+  --spacing-2xl: 64px;
+  --spacing-3xl: 80px;
+  --spacing-4xl: 120px;
+  
+  /* 반지름 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  
+  /* 그림자 */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
+  
+  /* 폰트 사이즈 */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  
+  /* 트랜지션 */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+/* 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  color: var(--color-neutral-dark);
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* 공통 컴포넌트 클래스 */
+@layer components {
+  /* 버튼 스타일 */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white transition-all duration-200 rounded-lg;
+    background-color: var(--color-secondary);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold transition-all duration-200 rounded-lg border;
+    color: var(--color-secondary);
+    background-color: transparent;
+    border-color: var(--color-secondary);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--color-secondary);
+    color: white;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold transition-all duration-200 rounded-lg;
+    color: var(--color-neutral-dark);
+    background-color: var(--color-neutral-light);
+  }
+  
+  .btn-ghost:hover {
+    background-color: var(--color-secondary);
+    color: white;
+  }
+  
+  /* 카드 스타일 */
+  .card {
+    @apply bg-white rounded-lg p-6 transition-all duration-200;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-neutral-light);
+  }
+  
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .card-elevated {
+    @apply bg-white rounded-xl p-8;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* 섹션 스타일 - 더 넉넉한 여백 */
+  .section {
+    @apply py-20 lg:py-28;
+  }
+  
+  .section-sm {
+    @apply py-16 lg:py-20;
+  }
+  
+  .section-lg {
+    @apply py-24 lg:py-36;
+  }
+  
+  /* 컨테이너 스타일 */
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-sm {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-xs {
+    @apply max-w-2xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* 타이포그래피 */
+  .heading-1 {
+    @apply text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight;
+    color: var(--color-neutral-dark);
+  }
+  
+  .heading-2 {
+    @apply text-3xl sm:text-4xl font-bold leading-tight;
+    color: var(--color-neutral-dark);
+  }
+  
+  .heading-3 {
+    @apply text-2xl sm:text-3xl font-bold leading-tight;
+    color: var(--color-neutral-dark);
+  }
+  
+  .heading-4 {
+    @apply text-xl sm:text-2xl font-semibold leading-tight;
+    color: var(--color-neutral-dark);
+  }
+  
+  .text-body {
+    @apply text-base leading-relaxed;
+    color: var(--color-neutral-dark);
+  }
+  
+  .text-muted {
+    @apply text-sm;
+    color: #6B7280;
+  }
+  
+  /* 입력 필드 */
+  .input {
+    @apply w-full px-4 py-3 text-sm border rounded-lg transition-colors duration-200;
+    border-color: var(--color-neutral-light);
+    background-color: white;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  
+  /* 배지 */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full;
+    background-color: var(--color-neutral-light);
+    color: var(--color-neutral-dark);
+  }
+  
+  .badge-primary {
+    background-color: var(--color-secondary);
+    color: white;
+  }
+  
+  .badge-accent {
+    background-color: var(--color-accent);
+    color: white;
+  }
+}
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-secondary);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-to-main:focus {
+  top: 6px;
+}
+
+/* Improved focus indicators */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-primary: #000000;
+    --color-neutral-dark: #000000;
+    --color-neutral-light: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0,0,0);
+  }
+  40%, 43% {
+    transform: translate3d(0,-30px,0);
+  }
+  70% {
+    transform: translate3d(0,-15px,0);
+  }
+  90% {
+    transform: translate3d(0,-4px,0);
+  }
+}
+
+/* 유틸리티 애니메이션 클래스 */
+.animate-fade-in {
+  animation: fadeIn var(--transition-slow) ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn var(--transition-slow) ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-slow) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-normal) ease-out;
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+/* 스크롤바 완전히 숨기기 */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Firefox 스크롤바 숨기기 */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* 포커스 아웃라인 개선 */
+*:focus {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* 네비게이션 반응형 */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-cta {
+    display: none !important;
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

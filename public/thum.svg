@@ -1,0 +1,36 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#005FCC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#004FA0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Logo Icon -->
+  <g transform="translate(500, 200)">
+    <path d="M6 7V21C6 21.5523 6.44772 22 7 22H17C17.5523 22 18 21.5523 18 21V7" 
+          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M5 7H19" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M8 4C8 2.89543 8.89543 2 10 2H14C15.1046 2 16 2.89543 16 4V7H8V4Z" 
+          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  
+  <!-- Company Name -->
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="72" font-weight="bold" 
+        text-anchor="middle" fill="white">TownUs</text>
+  
+  <!-- Korean Name -->
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="36" 
+        text-anchor="middle" fill="rgba(255,255,255,0.9)">타운어스</text>
+  
+  <!-- Description -->
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="28" 
+        text-anchor="middle" fill="rgba(255,255,255,0.8)">20년 경력의 전문 철거팀</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="470" font-family="Arial, sans-serif" font-size="24" 
+        text-anchor="middle" fill="rgba(255,255,255,0.7)">대기업이 신뢰하는 파트너</text>
+</svg>
