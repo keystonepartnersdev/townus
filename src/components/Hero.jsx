@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Award } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const Hero = ({ openModal }) => {
+const Hero = () => {
+  const navigate = useNavigate();
+
   const scrollToSection = (sectionId) => {
     const element = document.querySelector(sectionId);
     if (element) {
@@ -10,11 +13,11 @@ const Hero = ({ openModal }) => {
   };
 
   return (
-    <section 
-      className="min-h-[600px] md:min-h-[700px] lg:min-h-[800px] 
+    <section
+      className="min-h-[600px] md:min-h-[700px] lg:min-h-[800px]
                  pt-20 md:pt-24 lg:pt-28
-                 pb-20 md:pb-24 lg:pb-28 
- 
+                 pb-20 md:pb-24 lg:pb-28
+
                  flex items-center justify-center"
       style={{
         background: `
@@ -46,7 +49,7 @@ const Hero = ({ openModal }) => {
               borderRadius: '20px',
               backgroundColor: '#f1f5f9',
               border: '1px solid #e2e8f0',
-              color: '#005FCC'
+              color: '#1456FF'
             }}>
               <Award size={16} />
               대기업 공식 협력사
@@ -64,8 +67,8 @@ const Hero = ({ openModal }) => {
               maxWidth: '800px'
             }}
           >
-            <span className="block sm:hidden">철거는 끝이 아니라,<br /><span style={{ color: '#005FCC' }}>새로운 공간을 위한</span><br />시작입니다.</span>
-            <span className="hidden sm:block">철거는 끝이 아니라,<br /><span style={{ color: '#005FCC' }}>새로운 공간을 위한</span><br />시작입니다.</span>
+            <span className="block sm:hidden">철거는 끝이 아니라,<br /><span style={{ color: '#1456FF' }}>새로운 공간을 위한</span><br />시작입니다.</span>
+            <span className="hidden sm:block">철거는 끝이 아니라,<br /><span style={{ color: '#1456FF' }}>새로운 공간을 위한</span><br />시작입니다.</span>
           </motion.h1>
 
           {/* Subheading */}
@@ -79,8 +82,8 @@ const Hero = ({ openModal }) => {
               maxWidth: '600px'
             }}
           >
-            <span className="block sm:hidden">프리미엄 철거로<br />깨끗한 시작을 만들다</span>
-            <span className="hidden sm:block">프리미엄 철거로 깨끗한 시작을 만들다</span>
+            <span className="block sm:hidden">철거부터 설비까지,<br />국내 유일 일괄 시공</span>
+            <span className="hidden sm:block">철거부터 설비까지, 국내 유일 일괄 시공</span>
           </motion.p>
 
           {/* CTA Buttons */}
@@ -92,35 +95,59 @@ const Hero = ({ openModal }) => {
           >
             {/* Primary Button */}
             <button
-              onClick={() => openModal("무료 견적받기")}
-              className="px-6 py-3 md:px-8 md:py-4 text-sm md:text-base font-semibold rounded-lg 
-                        transition-all duration-200 flex items-center justify-center gap-2
-                        hover:transform hover:-translate-y-0.5 hover:shadow-lg"
+              onClick={() => navigate('/apply')}
+              className="text-sm md:text-base font-semibold transition-all duration-200 flex items-center justify-center gap-2"
               style={{
-                backgroundColor: '#005FCC',
+                backgroundColor: '#1456FF',
                 color: '#FFFFFF',
-                minHeight: '44px'
+                padding: '12px 24px',
+                borderRadius: '3px',
+                border: 'none',
+                minHeight: '44px',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: '0.13em'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#0D47D9';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 95, 204, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#1456FF';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
               무료 견적받기
               <ArrowRight size={16} />
             </button>
-            
+
             {/* Secondary Button */}
             <button
               onClick={() => scrollToSection('#why-how')}
-              className="px-6 py-3 md:px-8 md:py-4 text-sm md:text-base font-semibold rounded-lg 
-                        transition-all duration-200 flex items-center justify-center gap-2
-                        border-2 hover:bg-gray-50"
+              className="text-sm md:text-base font-semibold transition-all duration-200 flex items-center justify-center gap-2"
               style={{
                 backgroundColor: 'transparent',
-                color: '#005FCC',
-                borderColor: '#005FCC',
-                minHeight: '44px'
+                color: '#1456FF',
+                padding: '10px 22px',
+                borderRadius: '3px',
+                border: '2px solid #1456FF',
+                minHeight: '44px',
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                textTransform: 'uppercase',
+                letterSpacing: '0.13em'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#F0F7FF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               자세히 보기
-              <ArrowRight size={14} />
+              <ArrowRight size={16} />
             </button>
           </motion.div>
 

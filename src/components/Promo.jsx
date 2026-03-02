@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-const Promo = ({ openModal }) => {
+const Promo = () => {
+  const navigate = useNavigate();
 
   return (
-    <section 
-      id="promo" 
+    <section
+      id="promo"
       className="section"
       style={{
         background: `
@@ -20,11 +22,11 @@ const Promo = ({ openModal }) => {
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ 
+          transition={{
             duration: 0.6,
             ease: "easeOut"
           }}
-          whileHover={{ 
+          whileHover={{
             scale: 1.02,
             boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
             transition: { duration: 0.3 }
@@ -37,14 +39,14 @@ const Promo = ({ openModal }) => {
           }}
         >
           {/* 이벤트 배지 */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full mb-6" style={{ background: '#005FCC' }}>
+          <div className="inline-flex items-center px-4 py-2 rounded-full mb-6" style={{ background: '#1456FF' }}>
             <span className="text-white font-semibold text-sm">서비스 10주년 기념</span>
           </div>
 
 
           {/* 할인 강조 */}
           <div className="mb-8">
-            <div className="text-5xl font-black mb-3" style={{ color: '#005FCC' }}>
+            <div className="text-5xl font-black mb-3" style={{ color: '#1456FF' }}>
               5%
             </div>
             <div className="text-2xl font-bold mb-2" style={{ color: '#1F2937' }}>
@@ -59,18 +61,25 @@ const Promo = ({ openModal }) => {
           {/* CTA 영역 */}
           <div>
             <motion.button
-              onClick={() => openModal("할인쿠폰 받기")}
-              whileHover={{ 
-                backgroundColor: '#004FA0',
-                boxShadow: "0 8px 25px rgba(0, 95, 204, 0.3)",
+              onClick={() => navigate('/apply')}
+              whileHover={{
+                backgroundColor: '#0D47D9',
+                y: -1,
+                boxShadow: "0 4px 12px rgba(0, 95, 204, 0.3)",
                 transition: { duration: 0.2 }
               }}
               whileTap={{ scale: 0.98 }}
-              className="text-white font-semibold rounded-xl transition-all duration-300 text-base px-6 py-3 md:px-8 md:py-4"
+              className="text-white font-semibold transition-all duration-200"
               style={{
-                backgroundColor: '#005FCC',
+                backgroundColor: '#1456FF',
+                padding: '12px 24px',
+                borderRadius: '3px',
+                fontSize: '14px',
                 minHeight: '44px',
-                border: 'none'
+                border: 'none',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: '0.13em'
               }}
             >
               할인쿠폰 받기

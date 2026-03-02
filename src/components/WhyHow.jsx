@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Award, Calculator, Shield, CheckCircle } from 'lucide-react';
+import { Award, Calculator, Shield, CheckCircle, Wrench } from 'lucide-react';
 
 const WhyHow = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -8,6 +8,19 @@ const WhyHow = () => {
   const whyCards = [];
 
   const howCards = [
+    {
+      type: 'how',
+      icon: <Wrench size={32} className="text-white" />,
+      title: "철거·설비 원스톱 시스템",
+      subtitle: "품목별 전문 인력이 한 번에 해결",
+      details: [
+        "철거 따로, 설비 따로 X → 한 팀, 한 번에 O",
+        "철거·배관·전기·소방 전 공정 일괄 시공",
+        "공정별 전문 인력 즉시 투입, 일정 단축",
+        "타 업체 조율 없음, 책임 시공 일원화"
+      ],
+      bgColor: 'bg-gradient-to-br from-emerald-500 to-emerald-600'
+    },
     {
       type: 'how',
       icon: <Award size={32} className="text-white" />,

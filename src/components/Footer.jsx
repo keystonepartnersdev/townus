@@ -4,9 +4,9 @@ const Footer = () => {
   return (
     <footer 
       className="border-t"
-      style={{ 
-        backgroundColor: '#000000',
-        borderTopColor: '#333333'
+      style={{
+        backgroundColor: '#04091A',
+        borderTopColor: '#1a1f2e'
       }}
     >
       <div className="max-w-6xl mx-auto px-6 md:px-16 lg:px-20 py-10 md:py-15">
