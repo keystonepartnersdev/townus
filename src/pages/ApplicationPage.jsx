@@ -7,6 +7,10 @@ import DateInput from '../components/application/DateInput';
 import SelectCard from '../components/application/SelectCard';
 import BathroomStep from '../components/application/BathroomStep';
 import KitchenStep from '../components/application/KitchenStep';
+import FloorStep from '../components/application/FloorStep';
+import FurnitureStep from '../components/application/FurnitureStep';
+import WoodworkStep from '../components/application/WoodworkStep';
+import AdditionalRequestStep from '../components/application/AdditionalRequestStep';
 import SubmitButton from '../components/application/SubmitButton';
 import ConfirmationStep from '../components/application/ConfirmationStep';
 import SuccessView from '../components/application/SuccessView';
@@ -52,7 +56,14 @@ const ApplicationPage = () => {
     isValid,
     updateField,
     toggleBathroomItem,
+    toggleBathroomAdditional,
     toggleKitchenOption,
+    toggleFloorType,
+    toggleFloorAdditional,
+    toggleFurnitureType,
+    toggleWoodworkType,
+    toggleWoodworkDoorType,
+    toggleWoodworkCeilingType,
     formatPhoneNumber,
     goNext,
     goBack,
@@ -157,10 +168,14 @@ const ApplicationPage = () => {
             count={formData.bathroomCount}
             items={formData.bathroomItems}
             otherText={formData.bathroomOther}
+            additional={formData.bathroomAdditional}
+            additionalOtherText={formData.bathroomAdditionalOther}
             onNeededChange={(v) => updateField('bathroomNeeded', v)}
             onCountChange={(v) => updateField('bathroomCount', v)}
             onItemToggle={toggleBathroomItem}
             onOtherTextChange={(v) => updateField('bathroomOther', v)}
+            onAdditionalToggle={toggleBathroomAdditional}
+            onAdditionalOtherTextChange={(v) => updateField('bathroomAdditionalOther', v)}
           />
         );
       case 9:
@@ -170,10 +185,66 @@ const ApplicationPage = () => {
             type={formData.kitchenType}
             size={formData.kitchenSize}
             options={formData.kitchenOptions}
+            otherText={formData.kitchenOther}
             onNeededChange={(v) => updateField('kitchenNeeded', v)}
             onTypeChange={(v) => updateField('kitchenType', v)}
             onSizeChange={(v) => updateField('kitchenSize', v)}
             onOptionToggle={toggleKitchenOption}
+            onOtherTextChange={(v) => updateField('kitchenOther', v)}
+          />
+        );
+      case 10:
+        return (
+          <FloorStep
+            needed={formData.floorNeeded}
+            types={formData.floorTypes}
+            additional={formData.floorAdditional}
+            otherText={formData.floorOther}
+            onNeededChange={(v) => updateField('floorNeeded', v)}
+            onTypeToggle={toggleFloorType}
+            onAdditionalToggle={toggleFloorAdditional}
+            onOtherTextChange={(v) => updateField('floorOther', v)}
+          />
+        );
+      case 11:
+        return (
+          <FurnitureStep
+            needed={formData.furnitureNeeded}
+            types={formData.furnitureTypes}
+            otherText={formData.furnitureOther}
+            onNeededChange={(v) => updateField('furnitureNeeded', v)}
+            onTypeToggle={toggleFurnitureType}
+            onOtherTextChange={(v) => updateField('furnitureOther', v)}
+          />
+        );
+      case 12:
+        return (
+          <WoodworkStep
+            needed={formData.woodworkNeeded}
+            types={formData.woodworkTypes}
+            moldingArea={formData.woodworkMoldingArea}
+            baseboardArea={formData.woodworkBaseboardArea}
+            doorTypes={formData.woodworkDoorTypes}
+            doorCount={formData.woodworkDoorCount}
+            innerDoorCount={formData.woodworkInnerDoorCount}
+            ceilingTypes={formData.woodworkCeilingTypes}
+            otherText={formData.woodworkOther}
+            onNeededChange={(v) => updateField('woodworkNeeded', v)}
+            onTypeToggle={toggleWoodworkType}
+            onMoldingAreaChange={(v) => updateField('woodworkMoldingArea', v)}
+            onBaseboardAreaChange={(v) => updateField('woodworkBaseboardArea', v)}
+            onDoorTypeToggle={toggleWoodworkDoorType}
+            onDoorCountChange={(v) => updateField('woodworkDoorCount', v)}
+            onInnerDoorCountChange={(v) => updateField('woodworkInnerDoorCount', v)}
+            onCeilingTypeToggle={toggleWoodworkCeilingType}
+            onOtherTextChange={(v) => updateField('woodworkOther', v)}
+          />
+        );
+      case 13:
+        return (
+          <AdditionalRequestStep
+            value={formData.additionalRequest}
+            onChange={(v) => updateField('additionalRequest', v)}
           />
         );
       default:

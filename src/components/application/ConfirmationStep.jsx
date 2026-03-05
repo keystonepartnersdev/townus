@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { formatDesiredDate, RESIDENCE_STATUS, OTHER_TEAM_OPTIONS, BATHROOM_COUNT_OPTIONS, BATHROOM_ITEM_OPTIONS, KITCHEN_TYPE_OPTIONS, KITCHEN_SIZE_SMALL_OPTIONS, KITCHEN_SIZE_LARGE_OPTIONS, KITCHEN_ADDITIONAL_OPTIONS } from '../../hooks/useApplicationForm';
+import { formatDesiredDate, RESIDENCE_STATUS, OTHER_TEAM_OPTIONS, BATHROOM_COUNT_OPTIONS, BATHROOM_ITEM_OPTIONS, BATHROOM_ADDITIONAL_OPTIONS, KITCHEN_TYPE_OPTIONS, KITCHEN_SIZE_SMALL_OPTIONS, KITCHEN_SIZE_LARGE_OPTIONS, KITCHEN_ADDITIONAL_OPTIONS, FLOOR_TYPE_OPTIONS, FLOOR_ADDITIONAL_OPTIONS, FURNITURE_TYPE_OPTIONS, WOODWORK_TYPE_OPTIONS, DOOR_TYPE_OPTIONS, DOOR_COUNT_OPTIONS, CEILING_TYPE_OPTIONS } from '../../hooks/useApplicationForm';
 
 const ConfirmationStep = ({ formData, onEdit }) => {
   const desiredDateLabel = formatDesiredDate(formData.desiredDate);
@@ -29,6 +29,15 @@ const ConfirmationStep = ({ formData, onEdit }) => {
   if (formData.bathroomNeeded === 'yes') {
     items.push({ label: '화장실 개수', value: bathroomCountLabel, step: 8 });
     items.push({ label: '화장실 항목', value: bathroomItemsLabel + (formData.bathroomOther ? ` (${formData.bathroomOther})` : ''), step: 8 });
+
+    // 추가 선택 항목
+    const bathroomAdditionalLabel = formData.bathroomAdditional
+      .map(item => BATHROOM_ADDITIONAL_OPTIONS.find(o => o.value === item)?.label)
+      .filter(Boolean)
+      .join(', ');
+    if (bathroomAdditionalLabel) {
+      items.push({ label: '화장실 추가항목', value: bathroomAdditionalLabel + (formData.bathroomAdditionalOther ? ` (${formData.bathroomAdditionalOther})` : ''), step: 8 });
+    }
   }
 
   // 주방 정보
@@ -46,8 +55,91 @@ const ConfirmationStep = ({ formData, onEdit }) => {
   if (formData.kitchenNeeded === 'yes') {
     items.push({ label: '주방 형태', value: `${kitchenTypeLabel} (${kitchenSizeLabel})`, step: 9 });
     if (kitchenOptionsLabel) {
-      items.push({ label: '주방 추가항목', value: kitchenOptionsLabel, step: 9 });
+      items.push({ label: '주방 추가항목', value: kitchenOptionsLabel + (formData.kitchenOther ? ` (${formData.kitchenOther})` : ''), step: 9 });
     }
+  }
+
+  // 바닥 정보
+  const floorNeededLabel = formData.floorNeeded === 'yes' ? '필요' : '불필요';
+  const floorTypesLabel = formData.floorTypes
+    .map(type => FLOOR_TYPE_OPTIONS.find(t => t.value === type)?.label)
+    .filter(Boolean)
+    .join(', ');
+  const floorAdditionalLabel = formData.floorAdditional
+    .map(opt => FLOOR_ADDITIONAL_OPTIONS.find(o => o.value === opt)?.label)
+    .filter(Boolean)
+    .join(', ');
+
+  items.push({ label: '바닥 철거', value: floorNeededLabel, step: 10 });
+
+  // 바닥 필요시 상세 정보 추가
+  if (formData.floorNeeded === 'yes') {
+    items.push({ label: '바닥 종류', value: floorTypesLabel, step: 10 });
+    if (floorAdditionalLabel) {
+      items.push({ label: '바닥 추가항목', value: floorAdditionalLabel + (formData.floorOther ? ` (${formData.floorOther})` : ''), step: 10 });
+    }
+  }
+
+  // 가구 정보
+  const furnitureNeededLabel = formData.furnitureNeeded === 'yes' ? '필요' : '불필요';
+  const furnitureTypesLabel = formData.furnitureTypes
+    .map(type => FURNITURE_TYPE_OPTIONS.find(t => t.value === type)?.label)
+    .filter(Boolean)
+    .join(', ');
+
+  items.push({ label: '가구 철거', value: furnitureNeededLabel, step: 11 });
+
+  // 가구 필요시 상세 정보 추가
+  if (formData.furnitureNeeded === 'yes') {
+    items.push({ label: '가구 종류', value: furnitureTypesLabel + (formData.furnitureOther ? ` (${formData.furnitureOther})` : ''), step: 11 });
+  }
+
+  // 목공 정보
+  const woodworkNeededLabel = formData.woodworkNeeded === 'yes' ? '필요' : '불필요';
+  const woodworkTypesLabel = formData.woodworkTypes
+    .map(type => WOODWORK_TYPE_OPTIONS.find(t => t.value === type)?.label)
+    .filter(Boolean)
+    .join(', ');
+
+  items.push({ label: '목공 철거', value: woodworkNeededLabel, step: 12 });
+
+  // 목공 필요시 상세 정보 추가
+  if (formData.woodworkNeeded === 'yes') {
+    items.push({ label: '목공 항목', value: woodworkTypesLabel, step: 12 });
+
+    if (formData.woodworkTypes.includes('molding') && formData.woodworkMoldingArea) {
+      items.push({ label: '몰딩 평수', value: formData.woodworkMoldingArea, step: 12 });
+    }
+    if (formData.woodworkTypes.includes('baseboard') && formData.woodworkBaseboardArea) {
+      items.push({ label: '걸레받이 평수', value: formData.woodworkBaseboardArea, step: 12 });
+    }
+    if (formData.woodworkTypes.includes('door')) {
+      const doorTypesLabel = formData.woodworkDoorTypes
+        .map(type => DOOR_TYPE_OPTIONS.find(t => t.value === type)?.label)
+        .filter(Boolean)
+        .join(', ');
+      const doorCountLabel = DOOR_COUNT_OPTIONS.find(c => c.value === formData.woodworkDoorCount)?.label || '';
+      items.push({ label: '도어 상세', value: `${doorTypesLabel} (${doorCountLabel})`, step: 12 });
+    }
+    if (formData.woodworkTypes.includes('inner-door')) {
+      const innerDoorCountLabel = DOOR_COUNT_OPTIONS.find(c => c.value === formData.woodworkInnerDoorCount)?.label || '';
+      items.push({ label: '중문 갯수', value: innerDoorCountLabel, step: 12 });
+    }
+    if (formData.woodworkTypes.includes('ceiling')) {
+      const ceilingTypesLabel = formData.woodworkCeilingTypes
+        .map(type => CEILING_TYPE_OPTIONS.find(t => t.value === type)?.label)
+        .filter(Boolean)
+        .join(', ');
+      items.push({ label: '천장 철거', value: ceilingTypesLabel, step: 12 });
+    }
+    if (formData.woodworkOther) {
+      items.push({ label: '목공 기타', value: formData.woodworkOther, step: 12 });
+    }
+  }
+
+  // 기타 요청사항
+  if (formData.additionalRequest) {
+    items.push({ label: '기타 요청사항', value: formData.additionalRequest, step: 13 });
   }
 
   return (

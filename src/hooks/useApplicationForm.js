@@ -12,10 +12,30 @@ const INITIAL_FORM_DATA = {
   bathroomCount: '',
   bathroomItems: [],
   bathroomOther: '',
+  bathroomAdditional: [],
+  bathroomAdditionalOther: '',
   kitchenNeeded: '',
   kitchenType: '',
   kitchenSize: '',
   kitchenOptions: [],
+  kitchenOther: '',
+  floorNeeded: '',
+  floorTypes: [],
+  floorAdditional: [],
+  floorOther: '',
+  furnitureNeeded: '',
+  furnitureTypes: [],
+  furnitureOther: '',
+  woodworkNeeded: '',
+  woodworkTypes: [],
+  woodworkMoldingArea: '',
+  woodworkBaseboardArea: '',
+  woodworkDoorTypes: [],
+  woodworkDoorCount: '',
+  woodworkInnerDoorCount: '',
+  woodworkCeilingTypes: [],
+  woodworkOther: '',
+  additionalRequest: '',
 };
 
 // 날짜 포맷팅 헬퍼 함수
@@ -55,6 +75,14 @@ export const BATHROOM_ITEM_OPTIONS = [
   { value: 'other', label: '기타' },
 ];
 
+export const BATHROOM_ADDITIONAL_OPTIONS = [
+  { value: 'new-pipe', label: '급수관신설' },
+  { value: 'move-pipe', label: '급수관이동' },
+  { value: 'p-trap', label: '욕실P트랩 전환' },
+  { value: 'zendai', label: '젠다이시공' },
+  { value: 'other', label: '기타' },
+];
+
 export const KITCHEN_TYPE_OPTIONS = [
   { value: 'straight', label: '-자형' },
   { value: 'l-shape', label: 'ㄱ자형' },
@@ -78,6 +106,64 @@ export const KITCHEN_ADDITIONAL_OPTIONS = [
   { value: 'sub-kitchen', label: '보조주방' },
   { value: 'appliances', label: '옵션기기' },
   { value: 'plumbing', label: '입수전 공사' },
+  { value: 'tile', label: '주방타일' },
+  { value: 'other', label: '기타' },
+];
+
+export const FLOOR_TYPE_OPTIONS = [
+  { value: 'maru-bond', label: '마루(본드접착식)' },
+  { value: 'laminate', label: '강화마루' },
+  { value: 'deco-tile', label: '데코타일' },
+  { value: 'vinyl', label: '장판' },
+  { value: 'polishing-tile', label: '폴리싱타일' },
+];
+
+export const FLOOR_ADDITIONAL_OPTIONS = [
+  { value: 'hanji-sanding', label: '한지장판샌딩' },
+  { value: 'floor-sanding', label: '바닥샌딩' },
+  { value: 'other', label: '기타' },
+];
+
+export const FURNITURE_TYPE_OPTIONS = [
+  { value: 'entrance', label: '현관장' },
+  { value: 'builtin', label: '붙박이장' },
+  { value: 'movable', label: '이동장' },
+  { value: 'wall-mounted', label: '벽박이장' },
+  { value: 'living-room', label: '거실장' },
+  { value: 'vanity', label: '화장대' },
+  { value: 'other', label: '기타' },
+];
+
+export const WOODWORK_TYPE_OPTIONS = [
+  { value: 'molding', label: '몰딩' },
+  { value: 'baseboard', label: '걸레받이' },
+  { value: 'door', label: '도어' },
+  { value: 'inner-door', label: '중문' },
+  { value: 'ceiling', label: '천장철거' },
+  { value: 'other', label: '기타' },
+];
+
+export const DOOR_TYPE_OPTIONS = [
+  { value: 'full', label: '도어전체(문틀, 문짝, 문선 모두)' },
+  { value: 'door-only', label: '도어만' },
+  { value: 'trim-only', label: '문선만' },
+  { value: 'threshold', label: '문턱' },
+  { value: 'threshold-plaster', label: '문턱미장' },
+];
+
+export const DOOR_COUNT_OPTIONS = [
+  { value: 'unknown', label: '미확인' },
+  { value: '1', label: '1개' },
+  { value: '2', label: '2개' },
+  { value: '3', label: '3개' },
+  { value: '4', label: '4개' },
+  { value: '5+', label: '5개 이상' },
+];
+
+export const CEILING_TYPE_OPTIONS = [
+  { value: 'full', label: '전체' },
+  { value: 'well', label: '우물천장' },
+  { value: 'light-box', label: '천장등박스' },
 ];
 
 export const useApplicationForm = () => {
@@ -88,9 +174,9 @@ export const useApplicationForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
-  // 총 스텝 수 (확인 페이지 포함 10단계)
+  // 총 스텝 수 (확인 페이지 포함 14단계)
   const getTotalSteps = useCallback(() => {
-    return 10;
+    return 14;
   }, []);
 
   const toggleBathroomItem = useCallback((item) => {
@@ -102,12 +188,75 @@ export const useApplicationForm = () => {
     });
   }, []);
 
+  const toggleBathroomAdditional = useCallback((item) => {
+    setFormData(prev => {
+      const items = prev.bathroomAdditional.includes(item)
+        ? prev.bathroomAdditional.filter(i => i !== item)
+        : [...prev.bathroomAdditional, item];
+      return { ...prev, bathroomAdditional: items };
+    });
+  }, []);
+
   const toggleKitchenOption = useCallback((option) => {
     setFormData(prev => {
       const options = prev.kitchenOptions.includes(option)
         ? prev.kitchenOptions.filter(o => o !== option)
         : [...prev.kitchenOptions, option];
       return { ...prev, kitchenOptions: options };
+    });
+  }, []);
+
+  const toggleFloorType = useCallback((type) => {
+    setFormData(prev => {
+      const types = prev.floorTypes.includes(type)
+        ? prev.floorTypes.filter(t => t !== type)
+        : [...prev.floorTypes, type];
+      return { ...prev, floorTypes: types };
+    });
+  }, []);
+
+  const toggleFloorAdditional = useCallback((option) => {
+    setFormData(prev => {
+      const options = prev.floorAdditional.includes(option)
+        ? prev.floorAdditional.filter(o => o !== option)
+        : [...prev.floorAdditional, option];
+      return { ...prev, floorAdditional: options };
+    });
+  }, []);
+
+  const toggleFurnitureType = useCallback((type) => {
+    setFormData(prev => {
+      const types = prev.furnitureTypes.includes(type)
+        ? prev.furnitureTypes.filter(t => t !== type)
+        : [...prev.furnitureTypes, type];
+      return { ...prev, furnitureTypes: types };
+    });
+  }, []);
+
+  const toggleWoodworkType = useCallback((type) => {
+    setFormData(prev => {
+      const types = prev.woodworkTypes.includes(type)
+        ? prev.woodworkTypes.filter(t => t !== type)
+        : [...prev.woodworkTypes, type];
+      return { ...prev, woodworkTypes: types };
+    });
+  }, []);
+
+  const toggleWoodworkDoorType = useCallback((type) => {
+    setFormData(prev => {
+      const types = prev.woodworkDoorTypes.includes(type)
+        ? prev.woodworkDoorTypes.filter(t => t !== type)
+        : [...prev.woodworkDoorTypes, type];
+      return { ...prev, woodworkDoorTypes: types };
+    });
+  }, []);
+
+  const toggleWoodworkCeilingType = useCallback((type) => {
+    setFormData(prev => {
+      const types = prev.woodworkCeilingTypes.includes(type)
+        ? prev.woodworkCeilingTypes.filter(t => t !== type)
+        : [...prev.woodworkCeilingTypes, type];
+      return { ...prev, woodworkCeilingTypes: types };
     });
   }, []);
 
@@ -163,6 +312,46 @@ export const useApplicationForm = () => {
         }
         return formData.kitchenNeeded !== '';
       case 10:
+        // 바닥 철거: 필요없음이면 통과, 필요하면 바닥 타입 필수
+        if (formData.floorNeeded === 'no') return true;
+        if (formData.floorNeeded === 'yes') {
+          const hasFloorType = formData.floorTypes.length > 0;
+          const hasOtherText = !formData.floorAdditional.includes('other') || formData.floorOther.trim().length > 0;
+          return hasFloorType && hasOtherText;
+        }
+        return formData.floorNeeded !== '';
+      case 11:
+        // 가구 철거: 필요없음이면 통과, 필요하면 가구 타입 필수
+        if (formData.furnitureNeeded === 'no') return true;
+        if (formData.furnitureNeeded === 'yes') {
+          const hasFurnitureType = formData.furnitureTypes.length > 0;
+          const hasOtherText = !formData.furnitureTypes.includes('other') || formData.furnitureOther.trim().length > 0;
+          return hasFurnitureType && hasOtherText;
+        }
+        return formData.furnitureNeeded !== '';
+      case 12:
+        // 목공 철거: 필요없음이면 통과, 필요하면 타입 필수
+        if (formData.woodworkNeeded === 'no') return true;
+        if (formData.woodworkNeeded === 'yes') {
+          const hasWoodworkType = formData.woodworkTypes.length > 0;
+          // 몰딩 선택시 평수 필수
+          const moldingValid = !formData.woodworkTypes.includes('molding') || formData.woodworkMoldingArea.trim().length > 0;
+          // 걸레받이 선택시 평수 필수
+          const baseboardValid = !formData.woodworkTypes.includes('baseboard') || formData.woodworkBaseboardArea.trim().length > 0;
+          // 도어 선택시 타입과 갯수 필수
+          const doorValid = !formData.woodworkTypes.includes('door') || (formData.woodworkDoorTypes.length > 0 && formData.woodworkDoorCount !== '');
+          // 중문 선택시 갯수 필수
+          const innerDoorValid = !formData.woodworkTypes.includes('inner-door') || formData.woodworkInnerDoorCount !== '';
+          // 천장 선택시 타입 필수
+          const ceilingValid = !formData.woodworkTypes.includes('ceiling') || formData.woodworkCeilingTypes.length > 0;
+          // 기타 선택시 텍스트 필수
+          const otherValid = !formData.woodworkTypes.includes('other') || formData.woodworkOther.trim().length > 0;
+          return hasWoodworkType && moldingValid && baseboardValid && doorValid && innerDoorValid && ceilingValid && otherValid;
+        }
+        return formData.woodworkNeeded !== '';
+      case 13:
+        return true; // 기타 요청사항 (선택사항이므로 항상 통과)
+      case 14:
         return true; // 확인 단계
       default:
         return false;
@@ -196,6 +385,11 @@ export const useApplicationForm = () => {
         .filter(Boolean)
         .join(', ');
 
+      const bathroomAdditionalLabels = formData.bathroomAdditional
+        .map(item => BATHROOM_ADDITIONAL_OPTIONS.find(o => o.value === item)?.label)
+        .filter(Boolean)
+        .join(', ');
+
       const payload = {
         companyName: formData.companyName,
         managerName: formData.managerName,
@@ -208,6 +402,8 @@ export const useApplicationForm = () => {
         bathroomCount: formData.bathroomNeeded === 'yes' ? (BATHROOM_COUNT_OPTIONS.find(c => c.value === formData.bathroomCount)?.label || '') : '',
         bathroomItems: formData.bathroomNeeded === 'yes' ? bathroomItemLabels : '',
         bathroomOther: formData.bathroomOther,
+        bathroomAdditional: formData.bathroomNeeded === 'yes' ? bathroomAdditionalLabels : '',
+        bathroomAdditionalOther: formData.bathroomAdditionalOther,
         kitchenNeeded: formData.kitchenNeeded === 'yes' ? '필요' : '불필요',
         kitchenType: formData.kitchenNeeded === 'yes' ? (KITCHEN_TYPE_OPTIONS.find(t => t.value === formData.kitchenType)?.label || '') : '',
         kitchenSize: formData.kitchenNeeded === 'yes' ? (
@@ -216,6 +412,40 @@ export const useApplicationForm = () => {
         kitchenOptions: formData.kitchenNeeded === 'yes' ? (
           formData.kitchenOptions.map(opt => KITCHEN_ADDITIONAL_OPTIONS.find(o => o.value === opt)?.label).filter(Boolean).join(', ')
         ) : '',
+        kitchenOther: formData.kitchenOther,
+        floorNeeded: formData.floorNeeded === 'yes' ? '필요' : '불필요',
+        floorTypes: formData.floorNeeded === 'yes' ? (
+          formData.floorTypes.map(type => FLOOR_TYPE_OPTIONS.find(t => t.value === type)?.label).filter(Boolean).join(', ')
+        ) : '',
+        floorAdditional: formData.floorNeeded === 'yes' ? (
+          formData.floorAdditional.map(opt => FLOOR_ADDITIONAL_OPTIONS.find(o => o.value === opt)?.label).filter(Boolean).join(', ')
+        ) : '',
+        floorOther: formData.floorOther,
+        furnitureNeeded: formData.furnitureNeeded === 'yes' ? '필요' : '불필요',
+        furnitureTypes: formData.furnitureNeeded === 'yes' ? (
+          formData.furnitureTypes.map(type => FURNITURE_TYPE_OPTIONS.find(t => t.value === type)?.label).filter(Boolean).join(', ')
+        ) : '',
+        furnitureOther: formData.furnitureOther,
+        woodworkNeeded: formData.woodworkNeeded === 'yes' ? '필요' : '불필요',
+        woodworkTypes: formData.woodworkNeeded === 'yes' ? (
+          formData.woodworkTypes.map(type => WOODWORK_TYPE_OPTIONS.find(t => t.value === type)?.label).filter(Boolean).join(', ')
+        ) : '',
+        woodworkMoldingArea: formData.woodworkMoldingArea,
+        woodworkBaseboardArea: formData.woodworkBaseboardArea,
+        woodworkDoorTypes: formData.woodworkNeeded === 'yes' && formData.woodworkTypes.includes('door') ? (
+          formData.woodworkDoorTypes.map(type => DOOR_TYPE_OPTIONS.find(t => t.value === type)?.label).filter(Boolean).join(', ')
+        ) : '',
+        woodworkDoorCount: formData.woodworkNeeded === 'yes' && formData.woodworkTypes.includes('door') ? (
+          DOOR_COUNT_OPTIONS.find(c => c.value === formData.woodworkDoorCount)?.label || ''
+        ) : '',
+        woodworkInnerDoorCount: formData.woodworkNeeded === 'yes' && formData.woodworkTypes.includes('inner-door') ? (
+          DOOR_COUNT_OPTIONS.find(c => c.value === formData.woodworkInnerDoorCount)?.label || ''
+        ) : '',
+        woodworkCeilingTypes: formData.woodworkNeeded === 'yes' && formData.woodworkTypes.includes('ceiling') ? (
+          formData.woodworkCeilingTypes.map(type => CEILING_TYPE_OPTIONS.find(t => t.value === type)?.label).filter(Boolean).join(', ')
+        ) : '',
+        woodworkOther: formData.woodworkOther,
+        additionalRequest: formData.additionalRequest,
         timestamp: new Date().toLocaleString('ko-KR'),
         source: 'TownUs Website - New Application Form',
       };
@@ -258,7 +488,14 @@ export const useApplicationForm = () => {
     isValid: validateCurrentStep(),
     updateField,
     toggleBathroomItem,
+    toggleBathroomAdditional,
     toggleKitchenOption,
+    toggleFloorType,
+    toggleFloorAdditional,
+    toggleFurnitureType,
+    toggleWoodworkType,
+    toggleWoodworkDoorType,
+    toggleWoodworkCeilingType,
     formatPhoneNumber,
     goNext,
     goBack,

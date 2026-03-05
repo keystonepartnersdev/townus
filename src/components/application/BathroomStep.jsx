@@ -5,10 +5,14 @@ const BathroomStep = ({
   count,
   items,
   otherText,
+  additional,
+  additionalOtherText,
   onNeededChange,
   onCountChange,
   onItemToggle,
   onOtherTextChange,
+  onAdditionalToggle,
+  onAdditionalOtherTextChange,
 }) => {
   const countOptions = [
     { value: '1', label: '1개' },
@@ -25,7 +29,16 @@ const BathroomStep = ({
     { value: 'other', label: '기타' },
   ];
 
+  const additionalOptions = [
+    { value: 'new-pipe', label: '급수관신설' },
+    { value: 'move-pipe', label: '급수관이동' },
+    { value: 'p-trap', label: '욕실P트랩 전환' },
+    { value: 'zendai', label: '젠다이시공' },
+    { value: 'other', label: '기타' },
+  ];
+
   const isOtherSelected = items.includes('other');
+  const isAdditionalOtherSelected = additional.includes('other');
 
   return (
     <div className="bathroom-step-container">
@@ -148,6 +161,51 @@ const BathroomStep = ({
                     value={otherText}
                     onChange={(e) => onOtherTextChange(e.target.value)}
                     placeholder="예: 세면대, 변기 등"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* 추가 선택 항목 */}
+            <div className="bathroom-section">
+              <p className="bathroom-section-title">추가 선택 항목</p>
+              <p className="bathroom-section-subtitle">필요한 항목을 선택해주세요 (선택사항)</p>
+              <div className="select-chips">
+                {additionalOptions.map(option => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`select-chip ${additional.includes(option.value) ? 'selected' : ''}`}
+                    onClick={() => onAdditionalToggle(option.value)}
+                  >
+                    {additional.includes(option.value) && (
+                      <svg className="chip-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                        <polyline points="20,6 9,17 4,12" />
+                      </svg>
+                    )}
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 추가항목 기타 입력 */}
+            <AnimatePresence>
+              {isAdditionalOtherSelected && (
+                <motion.div
+                  className="bathroom-section"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <p className="bathroom-section-title">추가 기타 항목을 입력해주세요</p>
+                  <input
+                    type="text"
+                    className="input-underline"
+                    value={additionalOtherText}
+                    onChange={(e) => onAdditionalOtherTextChange(e.target.value)}
+                    placeholder="예: 기타 작업 내용"
                   />
                 </motion.div>
               )}

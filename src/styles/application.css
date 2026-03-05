@@ -934,37 +934,55 @@
   }
 }
 
-/* ===== Bathroom & Kitchen Step ===== */
+/* ===== Bathroom & Kitchen & Floor & Furniture & Woodwork Step ===== */
 .bathroom-step-container,
-.kitchen-step-container {
+.kitchen-step-container,
+.floor-step-container,
+.furniture-step-container,
+.woodwork-step-container {
   width: 100%;
 }
 
 .bathroom-needed,
-.kitchen-needed {
+.kitchen-needed,
+.floor-needed,
+.furniture-needed,
+.woodwork-needed {
   margin-top: 24px;
 }
 
 .bathroom-details,
-.kitchen-details {
+.kitchen-details,
+.floor-details,
+.furniture-details,
+.woodwork-details {
   overflow: hidden;
 }
 
 .bathroom-section,
-.kitchen-section {
+.kitchen-section,
+.floor-section,
+.furniture-section,
+.woodwork-section {
   margin-top: 28px;
   padding-top: 24px;
   border-top: 1px solid var(--border-light);
 }
 
 .bathroom-section:first-child,
-.kitchen-section:first-child {
+.kitchen-section:first-child,
+.floor-section:first-child,
+.furniture-section:first-child,
+.woodwork-section:first-child {
   border-top: none;
   padding-top: 0;
 }
 
 .bathroom-section-title,
-.kitchen-section-title {
+.kitchen-section-title,
+.floor-section-title,
+.furniture-section-title,
+.woodwork-section-title {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
@@ -973,10 +991,54 @@
 }
 
 .bathroom-section-subtitle,
-.kitchen-section-subtitle {
+.kitchen-section-subtitle,
+.floor-section-subtitle,
+.furniture-section-subtitle,
+.woodwork-section-subtitle {
   font-size: 14px;
   color: var(--text-secondary);
   margin-bottom: 16px;
+}
+
+/* ===== Additional Request Step ===== */
+.additional-request-container {
+  width: 100%;
+}
+
+.additional-request-content {
+  margin-top: 24px;
+}
+
+.additional-request-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.additional-request-textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.additional-request-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(20, 86, 255, 0.1);
+}
+
+.additional-request-textarea::placeholder {
+  color: var(--text-tertiary);
 }
 
 .count-chips,
