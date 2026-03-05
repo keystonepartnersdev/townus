@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import StepNavigation from '../components/application/StepNavigation';
 import TextInput from '../components/application/TextInput';
 import AddressInput from '../components/application/AddressInput';
+import DateInput from '../components/application/DateInput';
 import SelectCard from '../components/application/SelectCard';
-import SelectChip from '../components/application/SelectChip';
+import BathroomStep from '../components/application/BathroomStep';
+import KitchenStep from '../components/application/KitchenStep';
 import SubmitButton from '../components/application/SubmitButton';
 import ConfirmationStep from '../components/application/ConfirmationStep';
 import SuccessView from '../components/application/SuccessView';
 import {
   useApplicationForm,
-  BUILDING_TYPES,
-  DEMOLITION_TYPES,
-  SPACE_OPTIONS,
+  RESIDENCE_STATUS,
+  OTHER_TEAM_OPTIONS,
 } from '../hooks/useApplicationForm';
 
 const pageVariants = {
@@ -50,7 +51,8 @@ const ApplicationPage = () => {
     error,
     isValid,
     updateField,
-    toggleSpace,
+    toggleBathroomItem,
+    toggleKitchenOption,
     formatPhoneNumber,
     goNext,
     goBack,
@@ -71,9 +73,6 @@ const ApplicationPage = () => {
   // 마지막 스텝인지 확인 (확인 페이지)
   const isConfirmationStep = currentStep === totalSteps;
 
-  // 부분철거 공간 선택 스텝인지 확인
-  const isSpaceSelectionStep = formData.demolitionType === 'partial' && currentStep === 7;
-
   const renderStep = () => {
     // 확인 스텝
     if (isConfirmationStep) {
@@ -81,19 +80,6 @@ const ApplicationPage = () => {
         <ConfirmationStep
           formData={formData}
           onEdit={goToStep}
-        />
-      );
-    }
-
-    // 부분철거 공간 선택
-    if (isSpaceSelectionStep) {
-      return (
-        <SelectChip
-          question="어떤 공간을 철거할 예정인가요?"
-          subtext="해당하는 공간을 모두 선택해주세요"
-          options={SPACE_OPTIONS}
-          selectedValues={formData.partialSpaces}
-          onToggle={toggleSpace}
         />
       );
     }
@@ -139,20 +125,55 @@ const ApplicationPage = () => {
         );
       case 5:
         return (
-          <SelectCard
-            question="어떤 유형의 건물인가요?"
-            options={BUILDING_TYPES}
-            value={formData.buildingType}
-            onChange={(v) => updateField('buildingType', v)}
+          <DateInput
+            question={`희망하시는 시공일을\n선택해주세요`}
+            value={formData.desiredDate}
+            onChange={(v) => updateField('desiredDate', v)}
+            placeholder="날짜를 선택해주세요"
           />
         );
       case 6:
         return (
           <SelectCard
-            question="어떤 철거가 필요하신가요?"
-            options={DEMOLITION_TYPES}
-            value={formData.demolitionType}
-            onChange={(v) => updateField('demolitionType', v)}
+            question="현재 거주 중이신가요?"
+            options={RESIDENCE_STATUS}
+            value={formData.residenceStatus}
+            onChange={(v) => updateField('residenceStatus', v)}
+          />
+        );
+      case 7:
+        return (
+          <SelectCard
+            question="다른 철거팀도 작업하나요?"
+            options={OTHER_TEAM_OPTIONS}
+            value={formData.hasOtherTeam}
+            onChange={(v) => updateField('hasOtherTeam', v)}
+          />
+        );
+      case 8:
+        return (
+          <BathroomStep
+            needed={formData.bathroomNeeded}
+            count={formData.bathroomCount}
+            items={formData.bathroomItems}
+            otherText={formData.bathroomOther}
+            onNeededChange={(v) => updateField('bathroomNeeded', v)}
+            onCountChange={(v) => updateField('bathroomCount', v)}
+            onItemToggle={toggleBathroomItem}
+            onOtherTextChange={(v) => updateField('bathroomOther', v)}
+          />
+        );
+      case 9:
+        return (
+          <KitchenStep
+            needed={formData.kitchenNeeded}
+            type={formData.kitchenType}
+            size={formData.kitchenSize}
+            options={formData.kitchenOptions}
+            onNeededChange={(v) => updateField('kitchenNeeded', v)}
+            onTypeChange={(v) => updateField('kitchenType', v)}
+            onSizeChange={(v) => updateField('kitchenSize', v)}
+            onOptionToggle={toggleKitchenOption}
           />
         );
       default:

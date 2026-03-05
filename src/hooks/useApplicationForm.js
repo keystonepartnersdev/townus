@@ -5,32 +5,79 @@ const INITIAL_FORM_DATA = {
   managerName: '',
   phoneNumber: '',
   siteAddress: '',
-  buildingType: '',
-  demolitionType: '',
-  partialSpaces: [],
+  desiredDate: '',
+  residenceStatus: '',
+  hasOtherTeam: '',
+  bathroomNeeded: '',
+  bathroomCount: '',
+  bathroomItems: [],
+  bathroomOther: '',
+  kitchenNeeded: '',
+  kitchenType: '',
+  kitchenSize: '',
+  kitchenOptions: [],
 };
 
-export const BUILDING_TYPES = [
-  { value: 'apartment', label: '아파트', icon: '🏢' },
-  { value: 'villa', label: '빌라', icon: '🏠', description: '다세대/다가구 포함' },
-  { value: 'house', label: '단독주택', icon: '🏡' },
-  { value: 'officetel', label: '오피스텔', icon: '🏬' },
-  { value: 'other', label: '기타', icon: '🏗️', description: '상가, 사무실 등' },
+// 날짜 포맷팅 헬퍼 함수
+export const formatDesiredDate = (isoDate) => {
+  if (!isoDate) return '';
+  const d = new Date(isoDate);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[d.getDay()];
+  return `${year}년 ${month}월 ${day}일 (${weekday})`;
+};
+
+export const RESIDENCE_STATUS = [
+  { value: 'occupied', label: '거주중', icon: '🏠', description: '현재 거주하고 있어요' },
+  { value: 'vacant', label: '비거주중', icon: '🔑', description: '현재 비어있어요' },
 ];
 
-export const DEMOLITION_TYPES = [
-  { value: 'full', label: '전체철거', icon: '🏚️', description: '내부 전체 철거' },
-  { value: 'partial', label: '부분철거', icon: '🔧', description: '특정 공간만 철거' },
+export const OTHER_TEAM_OPTIONS = [
+  { value: 'yes', label: '중복 공정 존재', icon: '👥', description: '다른 팀도 함께 작업해요' },
+  { value: 'no', label: '없음', icon: '✋', description: '철거팀만 작업해요' },
 ];
 
-export const SPACE_OPTIONS = [
-  { value: 'living', label: '거실' },
-  { value: 'kitchen', label: '주방' },
-  { value: 'bathroom', label: '욕실' },
-  { value: 'bedroom', label: '침실' },
-  { value: 'balcony', label: '베란다' },
-  { value: 'entrance', label: '현관' },
+export const BATHROOM_COUNT_OPTIONS = [
+  { value: '1', label: '1개' },
+  { value: '2', label: '2개' },
+  { value: '3', label: '3개' },
+  { value: '3+', label: '3개 이상' },
+];
+
+export const BATHROOM_ITEM_OPTIONS = [
+  { value: 'all', label: '전체' },
+  { value: 'ceiling', label: '천장 및 내부기구' },
+  { value: 'tile', label: '벽 바닥 타일' },
+  { value: 'ubr', label: 'UBR' },
   { value: 'other', label: '기타' },
+];
+
+export const KITCHEN_TYPE_OPTIONS = [
+  { value: 'straight', label: '-자형' },
+  { value: 'l-shape', label: 'ㄱ자형' },
+  { value: 'u-shape', label: 'ㄷ자형' },
+  { value: 'square', label: 'ㅁ자형' },
+];
+
+export const KITCHEN_SIZE_SMALL_OPTIONS = [
+  { value: 'under-3.5', label: '3.5M 이하' },
+  { value: 'over-3.5', label: '3.5M 이상' },
+];
+
+export const KITCHEN_SIZE_LARGE_OPTIONS = [
+  { value: 'under-12', label: '12M 이하' },
+  { value: 'over-12', label: '12M 이상' },
+];
+
+export const KITCHEN_ADDITIONAL_OPTIONS = [
+  { value: 'island', label: '아일랜드' },
+  { value: 'balcony', label: '발코니' },
+  { value: 'sub-kitchen', label: '보조주방' },
+  { value: 'appliances', label: '옵션기기' },
+  { value: 'plumbing', label: '입수전 공사' },
 ];
 
 export const useApplicationForm = () => {
@@ -41,26 +88,32 @@ export const useApplicationForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
-  // 부분철거 선택 시 스텝이 추가됨
+  // 총 스텝 수 (확인 페이지 포함 10단계)
   const getTotalSteps = useCallback(() => {
-    if (formData.demolitionType === 'partial') {
-      return 8; // 7 + 공간선택
-    }
-    return 7;
-  }, [formData.demolitionType]);
+    return 10;
+  }, []);
+
+  const toggleBathroomItem = useCallback((item) => {
+    setFormData(prev => {
+      const items = prev.bathroomItems.includes(item)
+        ? prev.bathroomItems.filter(i => i !== item)
+        : [...prev.bathroomItems, item];
+      return { ...prev, bathroomItems: items };
+    });
+  }, []);
+
+  const toggleKitchenOption = useCallback((option) => {
+    setFormData(prev => {
+      const options = prev.kitchenOptions.includes(option)
+        ? prev.kitchenOptions.filter(o => o !== option)
+        : [...prev.kitchenOptions, option];
+      return { ...prev, kitchenOptions: options };
+    });
+  }, []);
 
   const updateField = useCallback((field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError(null);
-  }, []);
-
-  const toggleSpace = useCallback((space) => {
-    setFormData(prev => {
-      const spaces = prev.partialSpaces.includes(space)
-        ? prev.partialSpaces.filter(s => s !== space)
-        : [...prev.partialSpaces, space];
-      return { ...prev, partialSpaces: spaces };
-    });
   }, []);
 
   // 전화번호 포맷팅
@@ -85,15 +138,31 @@ export const useApplicationForm = () => {
       case 4:
         return formData.siteAddress.trim().length >= 5;
       case 5:
-        return formData.buildingType !== '';
+        return formData.desiredDate !== '';
       case 6:
-        return formData.demolitionType !== '';
+        return formData.residenceStatus !== '';
       case 7:
-        if (formData.demolitionType === 'partial') {
-          return formData.partialSpaces.length > 0;
-        }
-        return true; // 확인 단계
+        return formData.hasOtherTeam !== '';
       case 8:
+        // 화장실 철거: 필요없음이면 통과, 필요하면 개수와 항목 필수
+        if (formData.bathroomNeeded === 'no') return true;
+        if (formData.bathroomNeeded === 'yes') {
+          const hasCount = formData.bathroomCount !== '';
+          const hasItems = formData.bathroomItems.length > 0;
+          const hasOtherText = !formData.bathroomItems.includes('other') || formData.bathroomOther.trim().length > 0;
+          return hasCount && hasItems && hasOtherText;
+        }
+        return formData.bathroomNeeded !== '';
+      case 9:
+        // 주방 철거: 필요없음이면 통과, 필요하면 타입과 사이즈 필수
+        if (formData.kitchenNeeded === 'no') return true;
+        if (formData.kitchenNeeded === 'yes') {
+          const hasType = formData.kitchenType !== '';
+          const hasSize = formData.kitchenSize !== '';
+          return hasType && hasSize;
+        }
+        return formData.kitchenNeeded !== '';
+      case 10:
         return true; // 확인 단계
       default:
         return false;
@@ -122,16 +191,31 @@ export const useApplicationForm = () => {
     setError(null);
 
     try {
+      const bathroomItemLabels = formData.bathroomItems
+        .map(item => BATHROOM_ITEM_OPTIONS.find(o => o.value === item)?.label)
+        .filter(Boolean)
+        .join(', ');
+
       const payload = {
         companyName: formData.companyName,
         managerName: formData.managerName,
         phoneNumber: formData.phoneNumber,
         siteAddress: formData.siteAddress,
-        buildingType: BUILDING_TYPES.find(b => b.value === formData.buildingType)?.label || '',
-        demolitionType: DEMOLITION_TYPES.find(d => d.value === formData.demolitionType)?.label || '',
-        partialSpaces: formData.partialSpaces
-          .map(s => SPACE_OPTIONS.find(opt => opt.value === s)?.label)
-          .join(', '),
+        desiredDate: formatDesiredDate(formData.desiredDate),
+        residenceStatus: RESIDENCE_STATUS.find(r => r.value === formData.residenceStatus)?.label || '',
+        hasOtherTeam: OTHER_TEAM_OPTIONS.find(o => o.value === formData.hasOtherTeam)?.label || '',
+        bathroomNeeded: formData.bathroomNeeded === 'yes' ? '필요' : '불필요',
+        bathroomCount: formData.bathroomNeeded === 'yes' ? (BATHROOM_COUNT_OPTIONS.find(c => c.value === formData.bathroomCount)?.label || '') : '',
+        bathroomItems: formData.bathroomNeeded === 'yes' ? bathroomItemLabels : '',
+        bathroomOther: formData.bathroomOther,
+        kitchenNeeded: formData.kitchenNeeded === 'yes' ? '필요' : '불필요',
+        kitchenType: formData.kitchenNeeded === 'yes' ? (KITCHEN_TYPE_OPTIONS.find(t => t.value === formData.kitchenType)?.label || '') : '',
+        kitchenSize: formData.kitchenNeeded === 'yes' ? (
+          [...KITCHEN_SIZE_SMALL_OPTIONS, ...KITCHEN_SIZE_LARGE_OPTIONS].find(s => s.value === formData.kitchenSize)?.label || ''
+        ) : '',
+        kitchenOptions: formData.kitchenNeeded === 'yes' ? (
+          formData.kitchenOptions.map(opt => KITCHEN_ADDITIONAL_OPTIONS.find(o => o.value === opt)?.label).filter(Boolean).join(', ')
+        ) : '',
         timestamp: new Date().toLocaleString('ko-KR'),
         source: 'TownUs Website - New Application Form',
       };
@@ -173,7 +257,8 @@ export const useApplicationForm = () => {
     error,
     isValid: validateCurrentStep(),
     updateField,
-    toggleSpace,
+    toggleBathroomItem,
+    toggleKitchenOption,
     formatPhoneNumber,
     goNext,
     goBack,

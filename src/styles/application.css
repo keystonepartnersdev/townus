@@ -622,6 +622,402 @@
   margin-top: 16px;
 }
 
+/* ===== Date Input ===== */
+.date-input-container {
+  margin-top: 0;
+  width: 100%;
+}
+
+.date-input-wrapper {
+  position: relative;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.date-input-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  min-height: 56px;
+  background: var(--bg-gray);
+  border: 1.5px solid var(--border-light);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.date-input-trigger:hover {
+  border-color: var(--primary);
+}
+
+.date-input-trigger.has-value {
+  background: var(--bg-white);
+  border-color: var(--primary);
+}
+
+.date-placeholder {
+  color: var(--text-tertiary);
+  flex: 1;
+  text-align: left;
+}
+
+.date-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  flex: 1;
+  text-align: left;
+}
+
+.calendar-icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+}
+
+/* 데스크톱 드롭다운 */
+.date-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border-light);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 300;
+}
+
+.date-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 2px;
+}
+
+.month-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.month-nav-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-gray);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.month-nav-btn:hover:not(:disabled) {
+  background: var(--border-light);
+}
+
+.month-nav-btn:active:not(:disabled) {
+  background: var(--border-light);
+  transform: scale(0.94);
+}
+
+.month-nav-btn:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.date-picker-weekdays,
+.date-picker-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.date-picker-weekdays {
+  margin-bottom: 4px;
+}
+
+.weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  height: 32px;
+}
+
+.day-btn {
+  aspect-ratio: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.day-btn:hover:not(:disabled):not(.empty) {
+  background: var(--bg-gray);
+}
+
+.day-btn:active:not(:disabled):not(.empty) {
+  transform: scale(0.92);
+}
+
+.day-btn.empty {
+  cursor: default;
+}
+
+.day-btn.disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.day-btn.selected,
+.day-btn.selected:hover,
+.day-btn.selected:active {
+  background-color: #1456FF !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border: 2px solid #1456FF !important;
+  box-shadow: 0 2px 8px rgba(20, 86, 255, 0.3);
+}
+
+.date-picker-hint {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-light);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Date Picker - Mobile Popup (Center Modal) */
+@media (max-width: 480px) {
+  .date-picker-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9998;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .date-picker-dropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* transform은 framer-motion이 x, y로 처리 */
+    bottom: auto;
+    right: auto;
+    width: calc(100% - 40px);
+    max-width: 360px;
+    min-width: unset;
+    border-radius: 24px;
+    padding: 24px 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 9999;
+    background: #FFFFFF !important;
+    border: none;
+  }
+
+  /* 핸들 제거 (센터 모달이므로 불필요) */
+  .date-picker-dropdown::before {
+    display: none;
+  }
+
+  .date-picker-header {
+    margin-bottom: 20px;
+    padding: 0 4px;
+  }
+
+  .month-label {
+    font-size: 19px;
+  }
+
+  .month-nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .date-picker-weekdays,
+  .date-picker-days {
+    gap: 6px;
+  }
+
+  .date-picker-weekdays {
+    margin-bottom: 6px;
+  }
+
+  .weekday {
+    font-size: 13px;
+    font-weight: 700;
+    height: 36px;
+  }
+
+  .day-btn {
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .date-input-trigger {
+    min-height: 60px;
+    padding: 18px 20px;
+    font-size: 16px;
+    border-radius: 14px;
+  }
+
+  .date-picker-hint {
+    margin-top: 16px;
+    padding-top: 16px;
+    font-size: 13px;
+  }
+}
+
+/* Date Picker - Small Mobile */
+@media (max-width: 360px) {
+  .date-picker-dropdown {
+    padding: 24px 16px 16px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .date-picker-weekdays,
+  .date-picker-days {
+    gap: 4px;
+  }
+
+  .weekday {
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .day-btn {
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .month-nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ===== Bathroom & Kitchen Step ===== */
+.bathroom-step-container,
+.kitchen-step-container {
+  width: 100%;
+}
+
+.bathroom-needed,
+.kitchen-needed {
+  margin-top: 24px;
+}
+
+.bathroom-details,
+.kitchen-details {
+  overflow: hidden;
+}
+
+.bathroom-section,
+.kitchen-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light);
+}
+
+.bathroom-section:first-child,
+.kitchen-section:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.bathroom-section-title,
+.kitchen-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.bathroom-section-subtitle,
+.kitchen-section-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.count-chips,
+.type-chips,
+.size-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.count-chip,
+.type-chip,
+.size-chip {
+  padding: 12px 20px;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border-light);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.count-chip:active,
+.type-chip:active,
+.size-chip:active {
+  transform: scale(0.96);
+}
+
+.count-chip.selected,
+.type-chip.selected,
+.size-chip.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
   * {
