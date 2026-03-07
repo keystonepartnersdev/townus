@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import StepNavigation from '../components/application/StepNavigation';
 import TextInput from '../components/application/TextInput';
 import AddressInput from '../components/application/AddressInput';
@@ -45,6 +47,7 @@ const pageVariants = {
 
 const ApplicationPage = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const {
     formData,
     currentStep,
@@ -55,6 +58,7 @@ const ApplicationPage = () => {
     error,
     isValid,
     updateField,
+    initializeFromUser,
     toggleBathroomItem,
     toggleBathroomAdditional,
     toggleKitchenOption,
@@ -70,10 +74,37 @@ const ApplicationPage = () => {
     goToStep,
     submit,
     reset,
-  } = useApplicationForm();
+  } = useApplicationForm(user);
+
+  // 사용자 정보로 폼 초기화
+  useEffect(() => {
+    if (user && !formData.companyName) {
+      initializeFromUser(user);
+    }
+  }, [user, initializeFromUser, formData.companyName]);
+
+  // 로그인 체크
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate('/login?redirect=/apply');
+    }
+  }, [isLoading, isAuthenticated, navigate]);
+
+  // 로그인 체크 중 로딩 표시
+  if (isLoading) {
+    return (
+      <div className="application-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const handleGoHome = () => {
-    navigate('/');
+    navigate('/mypage');
   };
 
   const handlePhoneChange = (value) => {
@@ -254,7 +285,7 @@ const ApplicationPage = () => {
 
   const handleNext = () => {
     if (isConfirmationStep) {
-      submit();
+      submit(user?.id);
     } else {
       goNext();
     }

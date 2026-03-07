@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 const INITIAL_FORM_DATA = {
   companyName: '',
@@ -166,13 +166,35 @@ export const CEILING_TYPE_OPTIONS = [
   { value: 'light-box', label: '천장등박스' },
 ];
 
-export const useApplicationForm = () => {
-  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+export const useApplicationForm = (initialUserData = null) => {
+  const [formData, setFormData] = useState(() => {
+    if (initialUserData) {
+      return {
+        ...INITIAL_FORM_DATA,
+        companyName: initialUserData.companyName || '',
+        managerName: initialUserData.name || '',
+        phoneNumber: initialUserData.phone || '',
+      };
+    }
+    return INITIAL_FORM_DATA;
+  });
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState(1); // 1: forward, -1: backward
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState(null);
+
+  // 사용자 정보로 폼 초기화 (로그인 후 호출)
+  const initializeFromUser = useCallback((user) => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        companyName: prev.companyName || user.companyName || '',
+        managerName: prev.managerName || user.name || '',
+        phoneNumber: prev.phoneNumber || user.phone || '',
+      }));
+    }
+  }, []);
 
   // 총 스텝 수 (확인 페이지 포함 14단계)
   const getTotalSteps = useCallback(() => {
@@ -375,7 +397,7 @@ export const useApplicationForm = () => {
     setCurrentStep(step);
   }, [currentStep]);
 
-  const submit = useCallback(async () => {
+  const submit = useCallback(async (userId = null) => {
     setIsSubmitting(true);
     setError(null);
 
@@ -446,21 +468,23 @@ export const useApplicationForm = () => {
         ) : '',
         woodworkOther: formData.woodworkOther,
         additionalRequest: formData.additionalRequest,
+        userId: userId,
         timestamp: new Date().toLocaleString('ko-KR'),
         source: 'TownUs Website - New Application Form',
       };
 
-      // Google Sheets webhook
-      const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwwgYuK9jlNQw6e2kLk64XaV1I1dyjguOZUMpWHYhXi6kKW7NJ2fR4BSItidw4DqGkN/exec';
-
-      await fetch(WEBHOOK_URL, {
+      // API endpoint
+      const response = await fetch('/api/applications', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams(payload),
+        body: JSON.stringify(payload),
       });
+
+      if (!response.ok) {
+        throw new Error('신청 저장에 실패했습니다.');
+      }
 
       setIsSubmitted(true);
     } catch (err) {
@@ -487,6 +511,7 @@ export const useApplicationForm = () => {
     error,
     isValid: validateCurrentStep(),
     updateField,
+    initializeFromUser,
     toggleBathroomItem,
     toggleBathroomAdditional,
     toggleKitchenOption,
